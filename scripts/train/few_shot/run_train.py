@@ -5,7 +5,9 @@ from train import main
 parser = argparse.ArgumentParser(description='Train prototypical networks')
 
 # data args
-default_dataset = 'omniglot'
+# default_dataset = 'omniglot'
+default_dataset = 'sicklungs'
+# default_dataset = 'nih-pna'
 parser.add_argument('--data.dataset', type=str, default=default_dataset, metavar='DS',
                     help="data set name (default: {:s})".format(default_dataset))
 default_split = 'vinyals'
