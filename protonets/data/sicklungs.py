@@ -55,7 +55,7 @@ def load_class_images(d):
 
  # TODO for Cgloe: don't hardcode
                                              # partial(scale_image, 'data', d['model.x_dim'], d['model.x_dim']),
-                                             partial(scale_image, 'data', 1024, 1024),
+                                             partial(scale_image, 'data', 224, 224),
                                              partial(convert_tensor, 'data')]))
 
         loader = torch.utils.data.DataLoader(image_ds, batch_size=len(image_ds), shuffle=False)

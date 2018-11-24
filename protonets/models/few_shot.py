@@ -5,6 +5,8 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 
 from protonets.models import register_model
+from torchvision import models
+
 
 from .utils import euclidean_dist
 
@@ -38,8 +40,10 @@ class Protonet(nn.Module):
 
         x = torch.cat([xs.view(n_class * n_support, *xs.size()[2:]),
                        xq.view(n_class * n_query, *xq.size()[2:])], 0)
+        import numpy as np
+        x = np.repeat(x, 3, axis=1)
 
-        z = self.encoder.forward(x)
+        z = self.encoder.forward(x.cuda())
         z_dim = z.size(-1)
 
         z_proto = z[:n_class*n_support].view(n_class, n_support, z_dim).mean(1)
@@ -58,6 +62,13 @@ class Protonet(nn.Module):
             'loss': loss_val.item(),
             'acc': acc_val.item()
         }
+
+@register_model('protonet_pretrained')
+def protonet_pretrained(**kwargs):
+    model_ft = models.resnet18(pretrained=True)
+    #num_ftrs = model_ft.fc.in_features
+    #model_ft.fc = nn.Linear(num_ftrs, 2)
+    return Protonet(model_ft.cuda())
 
 @register_model('protonet_conv')
 def load_protonet_conv(**kwargs):
